@@ -8,6 +8,25 @@
 
 import SwiftUI
 
+enum Snag: Error {
+    case barren(at: String)
+    case skewSpan(at: String)
+    case torn(stage: String)
+    case choked(cooldown: TimeInterval)
+    case gridDown(httpCode: Int)
+    case shortPour(reason: String)
+    case deformed(at: String)
+
+    var isSealed: Bool {
+        switch self {
+        case .gridDown, .shortPour:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 struct HistoryView: View {
     @EnvironmentObject var store: AppStore
     @State private var showClear = false

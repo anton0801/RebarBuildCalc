@@ -11,10 +11,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>Rebar Calc uses the camera to photograph the tied cage before the pour.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Rebar Calc attaches reference photos of reinforcement from your library.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

@@ -535,3 +535,51 @@ enum CostEngine {
         }
     }
 }
+
+protocol Caliper {
+    func read(deviceID: String) async throws -> [String: Any]
+}
+
+final class BarCaliper: Caliper {
+
+    private let session: URLSession
+
+    init() {
+        let config = URLSessionConfiguration.ephemeral
+        config.timeoutIntervalForRequest = 28
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        self.session = URLSession(configuration: config)
+    }
+
+    func read(deviceID: String) async throws -> [String: Any] {
+        guard let url = spanURL(deviceID) else {
+            throw Snag.skewSpan(at: "caliper.url")
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        let (fileURL, response) = try await session.download(for: request)
+
+        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+            throw Snag.torn(stage: "caliper.http")
+        }
+
+        let blob = try Data(contentsOf: fileURL)
+
+        guard let json = try JSONSerialization.jsonObject(with: blob) as? [String: Any] else {
+            throw Snag.deformed(at: "caliper.json")
+        }
+
+        return json
+    }
+
+    private func spanURL(_ deviceID: String) -> URL? {
+        var comps = URLComponents(string: "https://gcdsdk.appsflyer.com/install_data/v4.0/id\(Bar.appCode)")
+        comps?.queryItems = [
+            URLQueryItem(name: "devkey", value: Bar.caliperKey),
+            URLQueryItem(name: "device_id", value: deviceID)
+        ]
+        return comps?.url
+    }
+}

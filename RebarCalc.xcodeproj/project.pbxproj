@@ -7,15 +7,53 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8F4E033D2FF545DC00703C4A /* AppsFlyerLib in Frameworks */ = {isa = PBXBuildFile; productRef = 8F4E033C2FF545DC00703C4A /* AppsFlyerLib */; };
+		8F4E03402FF545E200703C4A /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8F4E033F2FF545E200703C4A /* ConfettiSwiftUI */; };
+		8F4E03432FF546A200703C4A /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8F4E03422FF546A200703C4A /* FirebaseCore */; };
+		8F4E03452FF546A200703C4A /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 8F4E03442FF546A200703C4A /* FirebaseMessaging */; };
+		8F4E03552FF556FF00703C4A /* NotificationRebarExt.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8F4E034E2FF556FF00703C4A /* NotificationRebarExt.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8F4E035D2FF5570900703C4A /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 8F4E035C2FF5570900703C4A /* FirebaseMessaging */; };
 		EEF6D6062FEA88BC00992674 /* codemagic.yaml in Resources */ = {isa = PBXBuildFile; fileRef = EEF6D6052FEA88BC00992674 /* codemagic.yaml */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		8F4E03532FF556FF00703C4A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EE38E2A02FDE005800AA8EFB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8F4E034D2FF556FF00703C4A;
+			remoteInfo = NotificationRebarExt;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8F4E035A2FF556FF00703C4A /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8F4E03552FF556FF00703C4A /* NotificationRebarExt.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		8F4E034E2FF556FF00703C4A /* NotificationRebarExt.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationRebarExt.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE38E2A82FDE005800AA8EFB /* RebarCalc.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RebarCalc.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEF6D6052FEA88BC00992674 /* codemagic.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = codemagic.yaml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8F4E03592FF556FF00703C4A /* Exceptions for "NotificationRebarExt" folder in "NotificationRebarExt" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8F4E034D2FF556FF00703C4A /* NotificationRebarExt */;
+		};
 		EE38E2D42FDE00CE00AA8EFB /* Exceptions for "RebarCalc" folder in "RebarCalc" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -26,6 +64,14 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		8F4E034F2FF556FF00703C4A /* NotificationRebarExt */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8F4E03592FF556FF00703C4A /* Exceptions for "NotificationRebarExt" folder in "NotificationRebarExt" target */,
+			);
+			path = NotificationRebarExt;
+			sourceTree = "<group>";
+		};
 		EE38E2AA2FDE005800AA8EFB /* RebarCalc */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -37,21 +83,42 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		8F4E034B2FF556FF00703C4A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8F4E035D2FF5570900703C4A /* FirebaseMessaging in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EE38E2A52FDE005800AA8EFB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F4E03452FF546A200703C4A /* FirebaseMessaging in Frameworks */,
+				8F4E03402FF545E200703C4A /* ConfettiSwiftUI in Frameworks */,
+				8F4E03432FF546A200703C4A /* FirebaseCore in Frameworks */,
+				8F4E033D2FF545DC00703C4A /* AppsFlyerLib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8F4E035B2FF5570900703C4A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		EE38E29F2FDE005800AA8EFB = {
 			isa = PBXGroup;
 			children = (
 				EEF6D6052FEA88BC00992674 /* codemagic.yaml */,
 				EE38E2AA2FDE005800AA8EFB /* RebarCalc */,
+				8F4E034F2FF556FF00703C4A /* NotificationRebarExt */,
+				8F4E035B2FF5570900703C4A /* Frameworks */,
 				EE38E2A92FDE005800AA8EFB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -60,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				EE38E2A82FDE005800AA8EFB /* RebarCalc.app */,
+				8F4E034E2FF556FF00703C4A /* NotificationRebarExt.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -67,6 +135,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		8F4E034D2FF556FF00703C4A /* NotificationRebarExt */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8F4E03562FF556FF00703C4A /* Build configuration list for PBXNativeTarget "NotificationRebarExt" */;
+			buildPhases = (
+				8F4E034A2FF556FF00703C4A /* Sources */,
+				8F4E034B2FF556FF00703C4A /* Frameworks */,
+				8F4E034C2FF556FF00703C4A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				8F4E034F2FF556FF00703C4A /* NotificationRebarExt */,
+			);
+			name = NotificationRebarExt;
+			packageProductDependencies = (
+				8F4E035C2FF5570900703C4A /* FirebaseMessaging */,
+			);
+			productName = NotificationRebarExt;
+			productReference = 8F4E034E2FF556FF00703C4A /* NotificationRebarExt.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		EE38E2A72FDE005800AA8EFB /* RebarCalc */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EE38E2B62FDE005C00AA8EFB /* Build configuration list for PBXNativeTarget "RebarCalc" */;
@@ -74,16 +165,22 @@
 				EE38E2A42FDE005800AA8EFB /* Sources */,
 				EE38E2A52FDE005800AA8EFB /* Frameworks */,
 				EE38E2A62FDE005800AA8EFB /* Resources */,
+				8F4E035A2FF556FF00703C4A /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				8F4E03542FF556FF00703C4A /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				EE38E2AA2FDE005800AA8EFB /* RebarCalc */,
 			);
 			name = RebarCalc;
 			packageProductDependencies = (
+				8F4E033C2FF545DC00703C4A /* AppsFlyerLib */,
+				8F4E033F2FF545E200703C4A /* ConfettiSwiftUI */,
+				8F4E03422FF546A200703C4A /* FirebaseCore */,
+				8F4E03442FF546A200703C4A /* FirebaseMessaging */,
 			);
 			productName = RebarCalc;
 			productReference = EE38E2A82FDE005800AA8EFB /* RebarCalc.app */;
@@ -96,9 +193,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1610;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1610;
 				TargetAttributes = {
+					8F4E034D2FF556FF00703C4A = {
+						CreatedOnToolsVersion = 16.4;
+					};
 					EE38E2A72FDE005800AA8EFB = {
 						CreatedOnToolsVersion = 16.1;
 					};
@@ -113,17 +213,30 @@
 			);
 			mainGroup = EE38E29F2FDE005800AA8EFB;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				8F4E033B2FF545DC00703C4A /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */,
+				8F4E033E2FF545E200703C4A /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+				8F4E03412FF546A200703C4A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EE38E2A92FDE005800AA8EFB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				EE38E2A72FDE005800AA8EFB /* RebarCalc */,
+				8F4E034D2FF556FF00703C4A /* NotificationRebarExt */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		8F4E034C2FF556FF00703C4A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EE38E2A62FDE005800AA8EFB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -135,6 +248,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		8F4E034A2FF556FF00703C4A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EE38E2A42FDE005800AA8EFB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -144,7 +264,73 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		8F4E03542FF556FF00703C4A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8F4E034D2FF556FF00703C4A /* NotificationRebarExt */;
+			targetProxy = 8F4E03532FF556FF00703C4A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		8F4E03572FF556FF00703C4A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotificationRebarExt/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotificationRebarExt;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rebaredcalc.RebarCalc.NotificationRebarExt;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8F4E03582FF556FF00703C4A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotificationRebarExt/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotificationRebarExt;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.rebaredcalc.RebarCalc.NotificationRebarExt;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		EE38E2B42FDE005C00AA8EFB /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -276,7 +462,9 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RebarCalc/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "We need your permission to use camera in app";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Rebar Calc uses the camera to photograph the tied cage before the pour.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Rebar Calc attaches reference photos of reinforcement from your library.";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "Rebar Build Calc uses tracking data to improve app performance, enhance the user experience, analyze feature usage, and support ongoing updates and functionality improvements. This information also helps maintain app reliability, stability, and security.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -287,7 +475,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rebaredcalc.RebarCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -312,7 +500,9 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RebarCalc/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "We need your permission to use camera in app";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Rebar Calc uses the camera to photograph the tied cage before the pour.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Rebar Calc attaches reference photos of reinforcement from your library.";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "Rebar Build Calc uses tracking data to improve app performance, enhance the user experience, analyze feature usage, and support ongoing updates and functionality improvements. This information also helps maintain app reliability, stability, and security.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -323,7 +513,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rebaredcalc.RebarCalc;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -339,6 +529,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8F4E03562FF556FF00703C4A /* Build configuration list for PBXNativeTarget "NotificationRebarExt" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8F4E03572FF556FF00703C4A /* Debug */,
+				8F4E03582FF556FF00703C4A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EE38E2A32FDE005800AA8EFB /* Build configuration list for PBXProject "RebarCalc" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -358,6 +557,61 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8F4E033B2FF545DC00703C4A /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppsFlyerSDK/AppsFlyerFramework";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.18.0;
+			};
+		};
+		8F4E033E2FF545E200703C4A /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		8F4E03412FF546A200703C4A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.15.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8F4E033C2FF545DC00703C4A /* AppsFlyerLib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8F4E033B2FF545DC00703C4A /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */;
+			productName = AppsFlyerLib;
+		};
+		8F4E033F2FF545E200703C4A /* ConfettiSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8F4E033E2FF545E200703C4A /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
+			productName = ConfettiSwiftUI;
+		};
+		8F4E03422FF546A200703C4A /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8F4E03412FF546A200703C4A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		8F4E03442FF546A200703C4A /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8F4E03412FF546A200703C4A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		8F4E035C2FF5570900703C4A /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8F4E03412FF546A200703C4A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EE38E2A02FDE005800AA8EFB /* Project object */;
 }

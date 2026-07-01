@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 enum RebarReference {
 
@@ -79,3 +80,61 @@ enum ReinforcementVerdict: String {
         }
     }
 }
+
+
+final class Lash {
+
+    private var barsBuffer: [AnyHashable: Any] = [:]
+    private var lapsBuffer: [AnyHashable: Any] = [:]
+    private var fuse: Cancellable?
+
+    func takeBars(_ data: [AnyHashable: Any]) {
+        barsBuffer = data
+        arm()
+        if !lapsBuffer.isEmpty { knit() }
+    }
+
+    func takeLaps(_ data: [AnyHashable: Any]) {
+        guard !UserDefaults.standard.bool(forKey: BarKey.primed) else { return }
+        lapsBuffer = data
+        NotificationCenter.default.post(
+            name: .lapsArrived,
+            object: nil,
+            userInfo: ["deeplinksData": data]
+        )
+        fuse?.cancel()
+        fuse = nil
+        if !barsBuffer.isEmpty { knit() }
+    }
+
+    private func arm() {
+        fuse?.cancel()
+        fuse = DispatchQueue.main.schedule(
+            after: DispatchQueue.main.now.advanced(by: .seconds(2.5)),
+            interval: .seconds(3600),
+            tolerance: .milliseconds(50)
+        ) { [weak self] in
+            self?.fuse?.cancel()
+            self?.fuse = nil
+            self?.knit()
+        }
+    }
+
+    private func knit() {
+        fuse?.cancel()
+        fuse = nil
+
+        var merged = barsBuffer
+        for (key, value) in lapsBuffer {
+            let tag = "deep_\(key)"
+            if merged[tag] == nil { merged[tag] = value }
+        }
+
+        NotificationCenter.default.post(
+            name: .barsArrived,
+            object: nil,
+            userInfo: ["conversionData": merged]
+        )
+    }
+}
+

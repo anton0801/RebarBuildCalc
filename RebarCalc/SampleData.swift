@@ -66,3 +66,23 @@ enum SampleData {
                        history: history)
     }
 }
+
+enum BarKey {
+    static let routeURL = "rbc_route_url"
+    static let routeMode = "rbc_route_mode"
+    static let primed = "rbc_primed"
+    static let cinchGiven = "rbc_cinch_given"
+    static let cinchBarred = "rbc_cinch_barred"
+    static let cinchAt = "rbc_cinch_at"
+    static let pushURL = "temp_url"
+    static let fcm = "fcm_token"
+    static let push = "push_token"
+    static let attStatus = "att_status"
+    static let sharedFcm = "shared_fcm"
+}
+
+extension Notification.Name {
+    static let barsArrived = Notification.Name("ConversionDataReceived")
+    static let lapsArrived = Notification.Name("deeplink_values")
+    static let pourWake = Notification.Name("LoadTempURL")
+}

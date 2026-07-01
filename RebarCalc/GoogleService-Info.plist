@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBiXdhPMfyQwox7OD3vO57M3l1-7VBeYkg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>923020947151</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.rebaredcalc.RebarCalc</string>
+	<key>PROJECT_ID</key>
+	<string>rebarbuildcalc</string>
+	<key>STORAGE_BUCKET</key>
+	<string>rebarbuildcalc.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:923020947151:ios:9c77ae1f8112da42e091ba</string>
+</dict>
+</plist>

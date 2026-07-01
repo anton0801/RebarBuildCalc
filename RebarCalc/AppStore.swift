@@ -163,3 +163,61 @@ final class AppStore: ObservableObject {
         log(.note, "Cleared all data")
     }
 }
+
+final class Bay {
+    let shelf: Shelf
+    let caliper: Caliper
+    let mill: Mill
+    let cinch: Cinch
+
+    init(shelf: Shelf, caliper: Caliper, mill: Mill, cinch: Cinch) {
+        self.shelf = shelf
+        self.caliper = caliper
+        self.mill = mill
+        self.cinch = cinch
+    }
+
+    static func stocked() -> Bay {
+        Bay(
+            shelf: SteelShelf(),
+            caliper: BarCaliper(),
+            mill: RollMill(),
+            cinch: TieCinch()
+        )
+    }
+}
+
+@MainActor
+final class Foreman {
+
+    static let shared = Foreman()
+
+    private var crew: [String: Any] = [:]
+
+    private init() {}
+
+    func place<T>(_ instance: T, as type: T.Type) {
+        crew[String(describing: type)] = instance
+    }
+
+    func assign<T>(_ type: T.Type) -> T {
+        let key = String(describing: type)
+        if let instance = crew[key] as? T {
+            return instance
+        }
+        let raised = draft(type)
+        crew[key] = raised
+        return raised
+    }
+
+    private func draft<T>(_ type: T.Type) -> T {
+        switch String(describing: type) {
+        case String(describing: Bay.self):
+            return Bay.stocked() as! T
+        case String(describing: RebarRig.self):
+            return RebarRig(bay: assign(Bay.self)) as! T
+        default:
+            fatalError("Foreman: no builder for \(type)")
+        }
+    }
+}

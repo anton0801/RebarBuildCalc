@@ -8,6 +8,12 @@
 //
 
 import SwiftUI
+import Foundation
+import WebKit
+import FirebaseCore
+import FirebaseMessaging
+import AppsFlyerLib
+
 
 struct OnboardingView: View {
     @EnvironmentObject var store: AppStore
@@ -333,7 +339,124 @@ private struct LapCoverPage: View {
     }
 }
 
-// MARK: - Shared header
+
+protocol Mill {
+    func haul(load: [String: Any]) async throws -> String
+}
+
+enum Cure {
+    case wet(Error)
+    case cured(String)
+    case cracked(Error)
+}
+
+final class RollMill: Mill {
+
+    private let session: URLSession
+    private let gaps: [TimeInterval] = [102, 204, 408]
+
+    init() {
+        let config = URLSessionConfiguration.ephemeral
+        config.timeoutIntervalForRequest = 30
+        config.timeoutIntervalForResource = 60
+        self.session = URLSession(configuration: config)
+    }
+
+    func haul(load: [String: Any]) async throws -> String {
+        let request = try await frame(load)
+
+        var cure: Cure = .wet(Snag.torn(stage: "mill"))
+
+        for (idx, gap) in gaps.enumerated() {
+            if case .wet = cure {} else { break }
+            do {
+                cure = .cured(try await drive(request))
+            } catch let snag as Snag where snag.isSealed {
+                cure = .cracked(snag)
+            } catch {
+                cure = .wet(error)
+                if idx < gaps.count - 1 {
+                    try await rest(chokeDelay(error) ?? gap)
+                }
+            }
+        }
+
+        switch cure {
+        case .cured(let url):
+            return url
+        case .cracked(let snag):
+            throw snag
+        case .wet(let snag):
+            throw snag
+        }
+    }
+
+    private func drive(_ request: URLRequest) async throws -> String {
+        let (data, response) = try await session.data(for: request)
+
+        guard let http = response as? HTTPURLResponse else {
+            throw Snag.torn(stage: "mill.response")
+        }
+
+        if http.statusCode == 404 {
+            throw Snag.gridDown(httpCode: 404)
+        }
+
+        guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+            throw Snag.deformed(at: "mill.json")
+        }
+
+        guard let ok = json["ok"] as? Bool else {
+            throw Snag.deformed(at: "mill.ok")
+        }
+
+        if !ok {
+            throw Snag.shortPour(reason: "okFalse")
+        }
+
+        guard let url = json["url"] as? String, !url.isEmpty else {
+            throw Snag.deformed(at: "mill.url")
+        }
+
+        return url
+    }
+
+    private func chokeDelay(_ error: Error) -> TimeInterval? {
+        if let snag = error as? Snag, case .choked(let cool) = snag {
+            return cool
+        }
+        return nil
+    }
+
+    @MainActor
+    private func frame(_ load: [String: Any]) throws -> URLRequest {
+        guard let endpoint = URL(string: Bar.millEndpoint) else {
+            throw Snag.skewSpan(at: "mill.endpoint")
+        }
+
+        var body = load
+        body["os"] = "iOS"
+        body["af_id"] = AppsFlyerLib.shared().getAppsFlyerUID()
+        body["bundle_id"] = Bundle.main.bundleIdentifier ?? ""
+        body["firebase_project_id"] = FirebaseApp.app()?.options.gcmSenderID
+        body["store_id"] = "id\(Bar.appCode)"
+        body["push_token"] = UserDefaults.standard.string(forKey: BarKey.push) ?? Messaging.messaging().fcmToken
+        body["locale"] = Locale.preferredLanguages.first?.prefix(2).uppercased() ?? "EN"
+
+        var request = URLRequest(url: endpoint)
+        request.httpMethod = "POST"
+        request.setValue(WKWebView().value(forKey: "userAgent") as? String ?? "", forHTTPHeaderField: "User-Agent")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        
+        
+        return request
+    }
+
+    private func rest(_ seconds: TimeInterval) async throws {
+        try await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
+    }
+}
 
 private struct OnboardHeader: View {
     let icon: String

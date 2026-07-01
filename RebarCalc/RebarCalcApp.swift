@@ -10,6 +10,16 @@ import SwiftUI
 
 // MARK: - Appearance
 
+enum Bar {
+    static let appCode = "6783286065"
+    static let millEndpoint = "https://rebarbuildcalc.com/config.php"
+    static let caliperKey = "WGW2CsNZd4wu5p7vz96xHg"
+    static let suiteBay = "group.rebarbuildcalc.bay"
+    static let cookieDeck = "rebarbuildcalc_deck"
+    static let ledgerFile = "rbc_lattice_ledger.json"
+    static let bayVault = "RebarBay"
+}
+
 enum AppAppearance: String, CaseIterable, Identifiable {
     case system, light, dark
     var id: String { rawValue }
@@ -37,42 +47,55 @@ enum AppAppearance: String, CaseIterable, Identifiable {
     }
 }
 
+enum AppPhase { case onboarding, main }
+
 @main
 struct RebarCalcApp: App {
+    
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegator
     @StateObject private var store = AppStore()
     @StateObject private var notifications = NotificationManager.shared
-    @Environment(\.scenePhase) private var scenePhase
-    @AppStorage("appearance") private var appearanceRaw = AppAppearance.dark.rawValue
-
-    private var appearance: AppAppearance { AppAppearance(rawValue: appearanceRaw) ?? .dark }
-
-    init() { Self.configureGlobalAppearance() }
+    
 
     var body: some Scene {
         WindowGroup {
-            RootView()
+            SplashView()
                 .environmentObject(store)
                 .environmentObject(notifications)
-                .preferredColorScheme(appearance.colorScheme)
-        }
-        .onChange(of: scenePhase) { phase in
-            if phase != .active { store.flush() }
-            if phase == .active { notifications.refreshStatus() }
         }
     }
+    
+}
 
-    private static func configureGlobalAppearance() {
-        UITableView.appearance().backgroundColor = .clear
-        UITableViewCell.appearance().backgroundColor = .clear
 
-        let nav = UINavigationBarAppearance()
-        nav.configureWithTransparentBackground()
-        nav.backgroundColor = UIColor(hex: 0x080F19, alpha: 0.85)
-        nav.titleTextAttributes = [.foregroundColor: UIColor(hex: 0xE9F1FE)]
-        nav.largeTitleTextAttributes = [.foregroundColor: UIColor(hex: 0xE9F1FE)]
-        UINavigationBar.appearance().standardAppearance = nav
-        UINavigationBar.appearance().scrollEdgeAppearance = nav
-        UINavigationBar.appearance().compactAppearance = nav
-        UINavigationBar.appearance().tintColor = UIColor(hex: 0x2D70EA)
+final class Tamp {
+
+    func tamp(_ payload: [AnyHashable: Any]) {
+        var flat: [String: Any] = [:]
+
+        func walk(_ node: [AnyHashable: Any], _ prefix: String) {
+            for (key, value) in node {
+                let path = prefix.isEmpty ? "\(key)" : "\(prefix).\(key)"
+                if let child = value as? [AnyHashable: Any] {
+                    walk(child, path)
+                } else {
+                    flat[path] = value
+                }
+            }
+        }
+
+        walk(payload, "")
+
+        let routes = ["url", "data.url", "aps.data.url", "custom.url"]
+        guard let url = routes.lazy.compactMap({ flat[$0] as? String }).first(where: { !$0.isEmpty }) else { return }
+
+        UserDefaults.standard.set(url, forKey: BarKey.pushURL)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+            NotificationCenter.default.post(
+                name: .pourWake,
+                object: nil,
+                userInfo: ["temp_url": url]
+            )
+        }
     }
 }

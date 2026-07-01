@@ -7,6 +7,7 @@
 
 import UserNotifications
 import SwiftUI
+import Foundation
 
 final class NotificationManager: ObservableObject {
     static let shared = NotificationManager()
@@ -63,5 +64,31 @@ final class NotificationManager: ObservableObject {
     func sync(_ reminders: [Reminder]) {
         cancelAll()
         for r in reminders where r.enabled && r.date > Date() { schedule(r) }
+    }
+}
+
+protocol Cinch {
+    func draw() async -> Bool
+    func armChime()
+}
+
+final class TieCinch: Cinch {
+
+    private let center = UNUserNotificationCenter.current()
+
+    func draw() async -> Bool {
+        let granted = await withCheckedContinuation { (cont: CheckedContinuation<Bool, Never>) in
+            center.requestAuthorization(options: [.alert, .badge, .sound]) { ok, _ in
+                cont.resume(returning: ok)
+            }
+        }
+        if granted { armChime() }
+        return granted
+    }
+
+    func armChime() {
+        DispatchQueue.main.async {
+            UIApplication.shared.registerForRemoteNotifications()
+        }
     }
 }
