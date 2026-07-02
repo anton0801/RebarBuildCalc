@@ -260,6 +260,7 @@ final class Deck: ObservableObject {
     func networkConnectivityChanged(_ connected: Bool) {
         if !connected {
             showOfflineView = true
+            uiLocked = true
         }
     }
 
@@ -279,7 +280,6 @@ final class Deck: ObservableObject {
     }
     
 }
-
 
 struct PillTag: View {
     let text: String

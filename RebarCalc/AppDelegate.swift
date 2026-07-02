@@ -138,11 +138,14 @@ extension AppDelegate: AppsFlyerLibDelegate, DeepLinkDelegate {
         relayBars(data)
     }
 
+//    func onConversionDataFail(_ error: Error) {
+//        relayBars([
+//            "error": true,
+//            "error_desc": error.localizedDescription
+//        ])
+//    }
     func onConversionDataFail(_ error: Error) {
-        relayBars([
-            "error": true,
-            "error_desc": error.localizedDescription
-        ])
+        // print("attribution fail: \(error.localizedDescription)")
     }
 
     func didResolveDeepLink(_ result: DeepLinkResult) {
