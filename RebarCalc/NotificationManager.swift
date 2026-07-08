@@ -35,6 +35,15 @@ final class NotificationManager: ObservableObject {
             }
     }
 
+    func newRequestAuthorization(_ completion: ((Bool) -> Void)? = nil) {
+        UNUserNotificationCenter.current()
+            .requestAuthorization(options: [.alert, .badge, .sound]) { granted, _ in
+                DispatchQueue.main.async {
+                    completion?(granted)
+                }
+            }
+    }
+
     /// Schedules a one-off reminder keyed by its UUID so it can be cancelled later.
     func schedule(_ reminder: Reminder) {
         guard reminder.date > Date() else { return }

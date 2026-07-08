@@ -76,6 +76,25 @@ struct LapsSplicesView: View {
             }
         }
     }
+
+    private func lapCardsad(_ row: LapRow) -> some View {
+        Card {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text(row.label).font(Theme.heading(15)).foregroundColor(Theme.text)
+                    Spacer()
+                    PillTag(text: "Ø\(row.dia)", color: Theme.steel)
+                }
+                // splice diagram
+                SpliceDiagram(laps: min(row.lapsPerBar, 4))
+                    .frame(height: 28)
+                InfoRow(label: "Bar length", value: Fmt.meters(row.barLength))
+                InfoRow(label: "Lap length (\(Int(element.lapDiameters))×Ø)", value: Fmt.meters(row.lapLength))
+                InfoRow(label: "Laps per bar", value: Fmt.count(row.lapsPerBar))
+                InfoRow(label: "Added steel", value: Fmt.meters(row.addedMeters), valueColor: Theme.steel)
+            }
+        }
+    }
 }
 
 private struct SpliceDiagram: View {
